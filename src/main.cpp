@@ -7,8 +7,9 @@
 #define LED_BUILTIN 2 
 
 //Global variables
-bool x = true;
 String wifiConnected = "";
+WNM::Wifi wifi;
+std::vector<String> x;
 
 //Functions declaration
 String WifiScanOpenNet();
@@ -17,22 +18,19 @@ void WifiConnect(String ssid);
 void setup() {
   Serial.begin(115200);
   pinMode(LED_BUILTIN, OUTPUT);
+  x = wifi.getWifiList();  
 
   Serial.println("Setup");
 }
 
 void loop() {
-
-  WNM::Wifi wifi;
-  std::vector<String> x = wifi.getWifiList();
-  getchar();
   if(Serial.available()){
     String y = Serial.readStringUntil('\n');
     Serial.println("String capturada: "+y);
     Serial.println(x[std::atoi(y.c_str())]);
   }
 
-  delay(200000);
+  //delay(200000);
 
   /*
   //Retorna o nome da rede aberta com melhor sinal
