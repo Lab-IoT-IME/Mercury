@@ -79,7 +79,7 @@ bool Wifi::connectCheck(const char *SSID){
         Serial.print(".");
         times++;
         if (times == 250) break;
-        delay(100);
+        blink(LED,200);
     }
 
     if (WiFi.status() == WL_CONNECTED) {

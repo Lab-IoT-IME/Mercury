@@ -2,16 +2,19 @@
 #include "WiFi.h"
 #include <vector>
 #include <iostream>
+#include "Shared.h"
 
 namespace WNM {
-    class Wifi{
+    class Wifi {
         private:
+            int LED; 
             int openWifi;
             int countWifi;
             String wifiConnected;
             std::vector<String> wifiList;
             bool connectCheck(const char *SSID);
         public:
+            Wifi(int statusLED):LED(statusLED){};
             WiFiClass WiFi;
             std::vector<String> getList();
             bool connect();

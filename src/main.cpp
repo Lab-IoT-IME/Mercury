@@ -4,17 +4,19 @@
 #include <Wire.h>
 #include "MAX30100_PulseOximeter.h"
 
+#include "Shared.h"
+
 #define LED_RED 2
 #define LED_GREEN 4
 #define REPORTING_PERIOD_MS 1000
 
 //Global variables
 String wifiConnected = "";
-WNM::Wifi wifi;
+WNM::Wifi wifi(LED_GREEN);
 char SSID[] = "JKLMN 2.4";
 char PASS[] = "pandemia2020";
 PulseOximeter pox;
-MAX30100 chip;
+float BPM, SpO2;
 
 uint32_t tsLastReport = 0;
 
@@ -24,9 +26,7 @@ String WifiScanOpenNet();
 void onBeatDetected()
 {
   Serial.println("Beat!");
-  digitalWrite(LED_RED,HIGH);
-  delay(100);
-  digitalWrite(LED_RED,LOW);
+  blink(LED_RED, 200);
 }
 
 void setup() {
@@ -35,24 +35,24 @@ void setup() {
   pinMode(LED_GREEN,OUTPUT);
   delay(500);
 
+  wifi.connect(SSID, PASS);
+  wifi.printInfo();
+
+  //Serial.setTimeout(2000);
+
   if (!pox.begin()) {
     Serial.println("FAILED");
     for(;;);
   } else {
     Serial.println("SUCCESS");
+    pox.setOnBeatDetectedCallback(onBeatDetected);
+    
   };
 
-  digitalWrite(LED_GREEN, HIGH);
-
-  pox.setIRLedCurrent(MAX30100_LED_CURR_7_6MA);
-  pox.setOnBeatDetectedCallback(onBeatDetected);
-  chip.startTemperatureSampling();
-
-  //wifi.connect(SSID, PASS);
-  //wifi.printInfo();
-
-  //Serial.setTimeout(2000);
+  //pox.setIRLedCurrent(MAX30100_LED_CURR_14_2MA);
 }
+
+
 
 void loop() {
   // Make sure to call update as fast as possible
@@ -60,14 +60,15 @@ void loop() {
 
   // Asynchronously dump heart rate and oxidation levels to the serial
   // For both, a value of 0 means "invalid"
+  BPM = pox.getHeartRate();
+  SpO2 = pox.getSpO2();
   if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
-      Serial.print("Heart rate:");
-      Serial.print(pox.getHeartRate());
-      Serial.print("bpm / SpO2:");
-      Serial.print(pox.getSpO2());
-      Serial.println("%");
-
-      tsLastReport = millis();
+    Serial.print("Heart rate:");
+    Serial.print(BPM);
+    Serial.print("bpm / SpO2:");
+    Serial.print(SpO2);
+    Serial.println("%");
+    tsLastReport = millis();
   }
 
   /*
