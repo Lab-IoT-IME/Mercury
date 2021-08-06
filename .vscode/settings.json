@@ -41,6 +41,15 @@
         "cinttypes": "cpp",
         "utility": "cpp",
         "typeinfo": "cpp",
-        "string": "cpp"
-    }
+        "string": "cpp",
+        "list": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp",
+        "thread": "cpp",
+        "forward_list": "cpp",
+        "valarray": "cpp"
+    },
+    "cSpell.words": [
+        "slct"
+    ]
 }

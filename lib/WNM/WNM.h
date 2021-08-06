@@ -4,7 +4,8 @@
 #include <iostream>
 #include "Shared.h"
 
-namespace WNM {
+namespace WNM
+{
     class Wifi {
         private:
             int LED; 

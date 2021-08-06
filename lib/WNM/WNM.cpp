@@ -2,7 +2,8 @@
 
 using namespace WNM;
 
-std::vector<String> Wifi::getList(){
+std::vector<String> Wifi::getList()
+{
     Serial.println("Getting wifiList");
     openWifi = 0;
     countWifi = WiFi.scanNetworks();
@@ -26,7 +27,8 @@ std::vector<String> Wifi::getList(){
     return wifiList;
 }
 
-bool Wifi::connect(){
+bool Wifi::connect()
+{
     String ssid;
 
     if(wifiList.size()==0){
@@ -56,19 +58,22 @@ bool Wifi::connect(){
     return this->connect(ssid.c_str());
 }
 
-bool Wifi::connect(const char *SSID){
+bool Wifi::connect(const char *SSID)
+{
     WiFi.disconnect();
     WiFi.begin(SSID);
     return this->connectCheck(SSID);
 }
 
-bool Wifi::connect(const char *SSID, const char *Password){
+bool Wifi::connect(const char *SSID, const char *Password)
+{
     WiFi.disconnect();
     WiFi.begin(SSID, Password);
     return this->connectCheck(SSID);
 }
 
-bool Wifi::connectCheck(const char *SSID){
+bool Wifi::connectCheck(const char *SSID)
+{
     Serial.print("Connecting to WiFi ");
     Serial.print(SSID);
     Serial.print('.');
@@ -79,7 +84,8 @@ bool Wifi::connectCheck(const char *SSID){
         Serial.print(".");
         times++;
         if (times == 250) break;
-        blink(LED,200);
+        //blink(LED,200);
+        delay(100);
     }
 
     if (WiFi.status() == WL_CONNECTED) {
@@ -93,7 +99,8 @@ bool Wifi::connectCheck(const char *SSID){
     }
 }
 
-void Wifi::printInfo(){
+void Wifi::printInfo()
+{
     if(wifiConnected == ""){
         Serial.println("WiFi not connected!");
     }else{
